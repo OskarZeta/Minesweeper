@@ -7,7 +7,10 @@ class Game extends Component {
   state = {
     cells: [],
     empties : [],
-    final: false
+    start: false,
+    final: false,
+    minesLeft: undefined,
+    flagsLeft: undefined
   }
   endGame(){
     this.setState({
@@ -84,7 +87,7 @@ class Game extends Component {
       empties: array
     });
   }
-  generateMines(n){
+  renderField(n){
     let width = 9;
     let height = 9;
     if (n === 40) {
@@ -102,10 +105,22 @@ class Game extends Component {
         cells[i].push(0);
       }
     }
+    this.setState({
+      cells,
+      flagsLeft: n
+    });
+  }
+  generateMines(n, coordX, coordY){
+    let width = this.state.cells[0].length;
+    let height = this.state.cells.length;
+    let cells = this.state.cells;
     for (let i = 0; i < n; i++) {
       let x = (Math.floor(Math.random() * height));
       let y = (Math.floor(Math.random() * width));
-      if (cells[x][y] === 0) {
+      if (cells[x][y] === 0 &&
+          (x !== coordX && x !== coordX + 1 && x !== coordX - 1) &&
+          (y !== coordY && y !== coordY + 1 && y !== coordY - 1)
+        ) {
         cells[x][y] = 9;
       } else {
         --i;
@@ -142,25 +157,35 @@ class Game extends Component {
       }
     }
     this.setState({
-      cells,
-      mines: n,
-      minesLeft: n
+      minesLeft: n,
+      start: true
     });
   }
   componentDidMount(){
-    this.generateMines(10);
+    this.renderField(10);
+  }
+  componentWillUnmount(){
+    array = [];
+  }
+  changeFlagsNumber(par){
+    if (par) {
+      this.setState({
+        flagsLeft: eval(`${this.state.flagsLeft} ${par} ${1}`)
+      });
+    }
   }
   checkMines(par){
-    this.setState({
-      minesLeft: eval(`${this.state.minesLeft} ${par} ${1}`)
-    }, () => {
-      if (this.state.minesLeft === 0) {
-        this.endGame();
-        alert('YOU WON!');
-      }
-    });
+    if (par) {
+      this.setState({
+        minesLeft: eval(`${this.state.minesLeft} ${par} ${1}`)
+      }, () => {
+        if (this.state.minesLeft === 0) {
+          this.endGame();
+          alert('YOU WON!');
+        }
+      });
+    }
   }
-
   render() {
     // let mines = [
     //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -186,9 +211,13 @@ class Game extends Component {
                 value = {cell}
                 isBomb = {cell === 9}
                 isClicked = {!this.state.final ? !!this.state.empties.find(el => el.i === i && el.j === j) : true}
+                generateMines = {!this.state.minesLeft ? (n, x, y) => {this.generateMines(n, x, y)} : undefined}
+                start = {this.state.start}
                 checkNeighbours = {(i, j) => this.checkNeighbours(i, j)}
                 endGame = {(option) => this.endGame(option)}
                 checkMines = {(par) => this.checkMines(par)}
+                changeFlagsNumber = {(par) => this.changeFlagsNumber(par)}
+                flagsLeft = {this.state.flagsLeft}
               />
             )}
           </div>

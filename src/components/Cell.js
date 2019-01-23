@@ -6,6 +6,9 @@ class Cell extends Component {
     isMarked: false
   }
   clickHandler(){
+    if (this.props.generateMines) {
+      this.props.generateMines(10, this.props.index.i, this.props.index.y);
+    }
     if (!this.state.isClicked && !this.props.isClicked && !this.state.isMarked) {
       if (this.props.isBomb) {
         this.props.endGame();
@@ -21,17 +24,19 @@ class Cell extends Component {
     }
   }
   markHandler(e){
-    e.preventDefault();
-    if (!this.state.isClicked) {
+    if (e) {
+      e.preventDefault();
+    }
+    if (((!this.state.isClicked && !this.props.isClicked) || (this.props.isClicked && this.state.isMarked)) && this.props.start) {
+      if (!this.state.isMarked && this.props.flagsLeft === 0) {
+        return;
+      }
       this.setState({
         isMarked: !this.state.isMarked
       }, () => {
-        if (this.props.isBomb) {
-          if (this.state.isMarked) {
-            this.props.checkMines('-');
-          } else {
-            this.props.checkMines('+');
-          }
+        this.props.changeFlagsNumber(this.state.isMarked ? '-' : '+');
+        if (this.props.isBomb && !this.props.isClicked) {
+          this.props.checkMines(this.state.isMarked ? '-' : '+');
         }
       });
     }
@@ -39,7 +44,7 @@ class Cell extends Component {
   render() {
     return (
       <div
-        className={(this.props.isClicked || this.state.isClicked) ? 'cell cell--clicked' : this.state.isMarked ? 'cell cell--marked' : 'cell'}
+        className={((this.props.isClicked && !this.state.isMarked) || this.state.isClicked) ? 'cell cell--clicked' : this.state.isMarked ? 'cell cell--marked' : 'cell'}
         onClick={() => this.clickHandler()}
         onContextMenu={(e) => this.markHandler(e)}
       >
