@@ -6,13 +6,7 @@ class Menu extends Component {
   state = {
     options : false
   }
-  triggerOptions(e) {
-    if (e) {
-      e.preventDefault();
-      if (!e.target.classList.contains('options')) {
-        return;
-      }
-    }
+  triggerOptions() {
     this.setState({
       options: !this.state.options
     });
@@ -27,7 +21,7 @@ class Menu extends Component {
           <button onClick={() => {this.triggerOptions()}}>
             Options
           </button>
-          {this.state.options && <Options triggerOptions={(e) => {this.triggerOptions(e)}}/>}
+          {this.state.options && <Options triggerOptions={() => {this.triggerOptions()}}/>}
         </li>
         <li>
           <Link to='/scores'>High scores</Link>
