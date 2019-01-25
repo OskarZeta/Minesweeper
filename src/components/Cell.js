@@ -7,12 +7,11 @@ class Cell extends Component {
   }
   clickHandler(){
     if (this.props.generateMines) {
-      this.props.generateMines(10, this.props.index.i, this.props.index.y);
+      this.props.generateMines(this.props.index.i, this.props.index.y);
     }
     if (!this.state.isClicked && !this.props.isClicked && !this.state.isMarked) {
       if (this.props.isBomb) {
         this.props.endGame();
-        alert('YOU DIED');
       } else {
         this.setState({
           isClicked: true
@@ -44,11 +43,11 @@ class Cell extends Component {
   render() {
     return (
       <div
-        className={((this.props.isClicked && !this.state.isMarked) || this.state.isClicked) ? 'cell cell--clicked' : this.state.isMarked ? 'cell cell--marked' : 'cell'}
+        className={((this.props.isClicked && !this.state.isMarked) || this.state.isClicked) ? `cell cell--clicked cell--clicked-${this.props.value}` : this.state.isMarked ? 'cell cell--marked' : 'cell'}
         onClick={() => this.clickHandler()}
         onContextMenu={(e) => this.markHandler(e)}
       >
-        {(this.props.isClicked || this.state.isClicked) && this.props.value !== 0 ? this.props.value !== 9 ? this.props.value : '*' : ''}
+        {(this.props.isClicked || this.state.isClicked) && this.props.value !== 0 ? this.props.value !== 9 ? this.props.value : '💣' : ''}
       </div>
     );
   }

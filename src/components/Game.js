@@ -1,93 +1,107 @@
 import React, { Component } from 'react';
 import Cell from './Cell.js';
+import Timer from './Timer.js';
 
-let array = [];
+const defaultState = {
+  cells: [],
+  empties : [],
+  start: false,
+  final: false,
+  minesLeft: undefined,
+  flagsLeft: undefined,
+  time: 0
+};
 
 class Game extends Component {
-  state = {
-    cells: [],
-    empties : [],
-    start: false,
-    final: false,
-    minesLeft: undefined,
-    flagsLeft: undefined
-  }
+  state = Object.assign(defaultState)
   endGame(){
     this.setState({
-      final: true
+      final: true,
+      start: false
+    }, () => {
+      if (this.state.minesLeft === 0) {
+        alert('YOU WON!');
+      } else {
+        alert('YOU DIED');
+      }
     });
   }
+  restart(){
+    this.setState(defaultState);
+  }
   checkNeighbours (i, j) {
-    let arr = this.state.cells;
-    if (i-1 in arr) {
-      if (!array.find(el => el.i === i-1 && el.j === j)){
-        array.push({i: i-1, j});
-        if (arr[i-1][j] === 0) {
+    let cells = this.state.cells;
+    let empties = this.state.empties;
+    if (i-1 in cells) {
+      if (!empties.find(el => el.i === i-1 && el.j === j)){
+        empties.push({i: i-1, j});
+        if (cells[i-1][j] === 0) {
           this.checkNeighbours(i-1, j);
         }
       }
     }
-    if (i+1 in arr) {
-      if (!array.find(el => el.i === i+1 && el.j === j)){
-        array.push({i: i+1, j});
-        if (arr[i+1][j] === 0) {
+    if (i+1 in cells) {
+      if (!empties.find(el => el.i === i+1 && el.j === j)){
+        empties.push({i: i+1, j});
+        if (cells[i+1][j] === 0) {
           this.checkNeighbours(i+1, j);
         }
       }
     }
-    if (j-1 in arr[i]) {
-      if (!array.find(el => el.i === i && el.j === j-1)){
-        array.push({i, j: j-1});
-        if (arr[i][j-1] === 0) {
+    if (j-1 in cells[i]) {
+      if (!empties.find(el => el.i === i && el.j === j-1)){
+        empties.push({i, j: j-1});
+        if (cells[i][j-1] === 0) {
           this.checkNeighbours(i, j-1);
         }
       }
-      if (i-1 in arr) {
-        if (!array.find(el => el.i === i-1 && el.j === j-1)){
-          array.push({i: i-1, j: j-1});
-          if (arr[i-1][j-1] === 0){
+      if (i-1 in cells) {
+        if (!empties.find(el => el.i === i-1 && el.j === j-1)){
+          empties.push({i: i-1, j: j-1});
+          if (cells[i-1][j-1] === 0){
             this.checkNeighbours(i-1, j-1);
           }
         }
       }
-      if (i+1 in arr) {
-        if (!array.find(el => el.i === i+1 && el.j === j-1)){
-          array.push({i: i+1, j: j-1});
-          if (arr[i+1][j-1] === 0){
+      if (i+1 in cells) {
+        if (!empties.find(el => el.i === i+1 && el.j === j-1)){
+          empties.push({i: i+1, j: j-1});
+          if (cells[i+1][j-1] === 0){
             this.checkNeighbours(i+1, j-1);
           }
         }
       }
     }
-    if (j+1 in arr[i]) {
-      if (!array.find(el => el.i === i && el.j === j+1)){
-        array.push({i, j: j+1});
-        if (arr[i][j+1] === 0) {
+    if (j+1 in cells[i]) {
+      if (!empties.find(el => el.i === i && el.j === j+1)){
+        empties.push({i, j: j+1});
+        if (cells[i][j+1] === 0) {
           this.checkNeighbours(i, j+1);
         }
       }
-      if (i-1 in arr) {
-        if (!array.find(el => el.i === i-1 && el.j === j+1)){
-          array.push({i: i-1, j: j+1});
-          if (arr[i-1][j+1] === 0) {
+      if (i-1 in cells) {
+        if (!empties.find(el => el.i === i-1 && el.j === j+1)){
+          empties.push({i: i-1, j: j+1});
+          if (cells[i-1][j+1] === 0) {
             this.checkNeighbours(i-1, j+1);
           }
         }
       }
-      if (i+1 in arr) {
-        if (!array.find(el => el.i === i+1 && el.j === j+1)){
-          array.push({i: i+1, j: j+1});
-          if (arr[i+1][j+1] === 0) {
+      if (i+1 in cells) {
+        if (!empties.find(el => el.i === i+1 && el.j === j+1)){
+          empties.push({i: i+1, j: j+1});
+          if (cells[i+1][j+1] === 0) {
             this.checkNeighbours(i+1, j+1);
           }
         }
       }
     }
     this.setState({
-      empties: array
+      empties
     });
   }
-  renderField(n){
+  renderField(){
+    let n = this.props.minesTotal;
     let width = 9;
     let height = 9;
     if (n === 40) {
@@ -107,13 +121,16 @@ class Game extends Component {
     }
     this.setState({
       cells,
-      flagsLeft: n
+      flagsLeft: n,
+      empties: [],
+      time: 0
     });
   }
-  generateMines(n, coordX, coordY){
+  generateMines(coordX, coordY){
     let width = this.state.cells[0].length;
     let height = this.state.cells.length;
     let cells = this.state.cells;
+    let n = this.props.minesTotal;
     for (let i = 0; i < n; i++) {
       let x = (Math.floor(Math.random() * height));
       let y = (Math.floor(Math.random() * width));
@@ -161,11 +178,10 @@ class Game extends Component {
       start: true
     });
   }
-  componentDidMount(){
-    this.renderField(10);
-  }
-  componentWillUnmount(){
-    array = [];
+  setTime(t){
+    this.setState({
+      time: t
+    })
   }
   changeFlagsNumber(par){
     if (par) {
@@ -181,26 +197,51 @@ class Game extends Component {
       }, () => {
         if (this.state.minesLeft === 0) {
           this.endGame();
-          alert('YOU WON!');
         }
       });
     }
   }
+  updateScores(){
+    let difficulty;
+    switch (this.props.minesTotal) {
+      case 10:
+        difficulty = 'easy';
+        break;
+      case 40:
+        difficulty = 'medium';
+        break;
+      case 99:
+        difficulty = 'hard';
+        break;
+    }
+    let previousScore = 0;
+    let scores = JSON.parse(localStorage.getItem('minesweeper'));
+    if (scores !== null){
+      if (scores[difficulty]) {
+        previousScore = scores[difficulty];
+      }
+    }
+    let obj = Object.assign(scores || {}, {
+      [difficulty]: this.state.time < previousScore || previousScore === 0 ? this.state.time : previousScore
+    });
+    localStorage.setItem('minesweeper', JSON.stringify(obj));
+  }
+  componentDidMount(){
+    this.renderField();
+  }
+  componentDidUpdate(prevProps, prevState){
+    if (prevState.cells !== this.state.cells && this.state.cells.length === 0){
+      this.renderField();
+    }
+    if (prevState.time !== this.state.time && this.state.minesLeft === 0) {
+      this.updateScores();
+    }
+  }
   render() {
-    // let mines = [
-    //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    //   [0, 0, 0, 0, 0, 0, 9, 0, 0],
-    //   [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    //   [9, 0, 0, 0, 0, 0, 0, 0, 0],
-    //   [9, 0, 0, 0, 0, 0, 0, 0, 0],
-    //   [9, 0, 9, 0, 0, 0, 0, 0, 0],
-    //   [0, 0, 0, 9, 0, 0, 0, 9, 0],
-    //   [0, 0, 0, 0, 0, 0, 9, 0, 0],
-    //   [9, 0, 0, 9, 0, 0, 0, 0, 0]
-    // ];
-    //console.log(mines);
     return <div className='game'>
       GAME
+      <Timer start={this.state.start} final={this.state.final} setTime={(t) => this.setTime(t)}/>
+      <button onClick={() => this.restart()}>Restart</button>
       <div>
         {this.state.cells.map((row, i) =>
           <div className='game__row' key={i}>
@@ -211,7 +252,7 @@ class Game extends Component {
                 value = {cell}
                 isBomb = {cell === 9}
                 isClicked = {!this.state.final ? !!this.state.empties.find(el => el.i === i && el.j === j) : true}
-                generateMines = {!this.state.minesLeft ? (n, x, y) => {this.generateMines(n, x, y)} : undefined}
+                generateMines = {(!this.state.start && !this.state.final) ? (x, y) => {this.generateMines(x, y)} : undefined}
                 start = {this.state.start}
                 checkNeighbours = {(i, j) => this.checkNeighbours(i, j)}
                 endGame = {(option) => this.endGame(option)}

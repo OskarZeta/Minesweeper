@@ -60,8 +60,13 @@ main {
   left: 0;
   background-color: rgba(0, 0, 0, 0.6);
 }
+.options__modal{
+  background-color: white;
+}
 .cell{
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 20px;
   height: 20px;
   border: 1px solid black;
@@ -69,12 +74,41 @@ main {
   user-select: none;
   cursor: pointer;
   background: blue;
+  font-weight: bold;
+  font-size: 18px;
 }
 .cell:hover{
   background: darkblue;
 }
 .cell--clicked{
   background: #ffffff;
+}
+.cell--clicked-1{
+  color: blue;
+}
+.cell--clicked-2{
+  color: green;
+}
+.cell--clicked-3{
+  color: red;
+}
+.cell--clicked-4{
+  color: darkblue;
+}
+.cell--clicked-5{
+  color: darkred;
+}
+.cell--clicked-6{
+  color: orange;
+}
+.cell--clicked-7{
+  color: purple;
+}
+.cell--clicked-8{
+  color: black;
+}
+.cell--clicked-9{
+  font-size: 16px;
 }
 .cell--clicked:hover{
   background: white;
