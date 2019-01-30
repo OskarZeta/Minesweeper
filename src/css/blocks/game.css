@@ -1,0 +1,61 @@
+.game {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.game__wrapper {
+  padding: 10px;
+  background: rgba(143, 144, 255, 0.26);
+  border: 3px solid darkblue;
+}
+.game__stats {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+.game__row {
+  display: flex;
+}
+.game__timer, .game__mines-left {
+  position: absolute;
+  top: 0;
+  display: flex;
+}
+.game__timer {
+  left: 0;
+}
+.game__mines-left {
+  right: 0;
+}
+.game__restart-btn {
+  background: white;
+  border: none;
+  width: 22px;
+  height: 22px;
+  font-weight: bold;
+  font-size: 14px;
+  color: red;
+  cursor: pointer;
+}
+.game__restart-btn:active{
+  border-left: 1px solid darkblue;
+  border-top: 1px solid darkblue;
+}
+.game__timer-value, .game__mine-value {
+  width: 2em;
+  background: white;
+  padding: 0 2px;
+}
+.game__timer-value {
+  margin-left: 5px;
+  text-align: left;
+}
+.game__mine-value {
+  margin-right: 5px;
+  text-align: right;
+}
+.game__timer-icon, .game__mine-icon {
+  width: 20px;
+  height: 20px;
+}

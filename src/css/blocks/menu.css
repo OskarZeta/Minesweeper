@@ -1,0 +1,38 @@
+.menu {
+  margin: auto;
+}
+.menu__header {
+  font-family: 'VT323', monospace;
+  font-size: 100px;
+  color: white;
+  text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+  text-transform: uppercase;
+  letter-spacing: 10px;
+  margin: 0;
+}
+.menu ul {
+  padding: 0;
+  margin: 50px 0 0 0;
+  list-style-type: none;
+}
+.menu__btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 250px;
+  height: 50px;
+  padding: 0;
+  margin: 0 auto 10px auto;
+  border: none;
+  border-radius: 5px;
+  font-size: 20px;
+  text-decoration: none;
+  color: white;
+  background: rgba(119, 144, 252, 0.64);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: 0.15s;
+}
+.menu__btn:hover {
+  background: rgba(119, 144, 252, 1);
+}

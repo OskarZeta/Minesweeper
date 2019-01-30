@@ -6,116 +6,20 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(to bottom, rgb(231, 238, 255), rgb(203, 218, 255));
 }
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+button, input, textarea {
+  outline: none;
 }
-
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 main {
   position: relative;
-}
-.game__row {
-  display: flex;
-}
-.options {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-}
-.options__modal{
-  background-color: white;
-}
-.cell{
   display: flex;
   justify-content: center;
-  align-items: center;
-  width: 20px;
-  height: 20px;
-  border: 1px solid black;
-  text-align: center;
-  user-select: none;
-  cursor: pointer;
-  background: blue;
-  font-weight: bold;
-  font-size: 18px;
+  min-height: 100vh;
 }
-.cell:hover{
-  background: darkblue;
-}
-.cell--clicked{
-  background: #ffffff;
-}
-.cell--clicked-1{
-  color: blue;
-}
-.cell--clicked-2{
-  color: green;
-}
-.cell--clicked-3{
-  color: red;
-}
-.cell--clicked-4{
-  color: darkblue;
-}
-.cell--clicked-5{
-  color: darkred;
-}
-.cell--clicked-6{
-  color: orange;
-}
-.cell--clicked-7{
-  color: purple;
-}
-.cell--clicked-8{
-  color: black;
-}
-.cell--clicked-9{
-  font-size: 16px;
-}
-.cell--clicked:hover{
-  background: white;
-}
-.cell--marked{
-  background: red;
-}
-.cell--marked:hover{
-  background: rgb(180, 0, 0);
-}
+
+@import "./blocks/menu.css";
+@import "./blocks/options.css";
+@import "./blocks/game.css";
+@import "./blocks/cell.css";
+@import "./blocks/scores.css";
