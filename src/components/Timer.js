@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import timer from "../img/timer.png";
 
 class Timer extends Component {
   state = {
@@ -31,8 +32,9 @@ class Timer extends Component {
   }
   render(){
     return (
-      <div className='timer'>
-        {this.state.t}
+      <div className="game__timer">
+        <img className="game__timer-icon" src={timer} alt="timer"/>
+        <div className="game__timer-value">{this.state.t}</div>
       </div>
     );
   }

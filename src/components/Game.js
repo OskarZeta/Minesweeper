@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Cell from './Cell.js';
 import Timer from './Timer.js';
+import mine from '../img/mine.png';
 
 const defaultState = {
   cells: [],
@@ -186,14 +187,14 @@ class Game extends Component {
   changeFlagsNumber(par){
     if (par) {
       this.setState({
-        flagsLeft: eval(`${this.state.flagsLeft} ${par} ${1}`)
+        flagsLeft: this.state.flagsLeft + par
       });
     }
   }
   checkMines(par){
     if (par) {
       this.setState({
-        minesLeft: eval(`${this.state.minesLeft} ${par} ${1}`)
+        minesLeft: this.state.minesLeft + par
       }, () => {
         if (this.state.minesLeft === 0) {
           this.endGame();
@@ -213,6 +214,8 @@ class Game extends Component {
       case 99:
         difficulty = 'hard';
         break;
+      default :
+        difficulty = 'easy';
     }
     let previousScore = 0;
     let scores = JSON.parse(localStorage.getItem('minesweeper'));
@@ -230,7 +233,7 @@ class Game extends Component {
     this.renderField();
   }
   componentDidUpdate(prevProps, prevState){
-    if (prevState.cells !== this.state.cells && this.state.cells.length === 0){
+    if (prevState.cells !== this.state.cells && this.state.cells.length === 0) {
       this.renderField();
     }
     if (prevState.time !== this.state.time && this.state.minesLeft === 0) {
@@ -238,33 +241,42 @@ class Game extends Component {
     }
   }
   render() {
-    return <div className='game'>
-      GAME
-      <Timer start={this.state.start} final={this.state.final} setTime={(t) => this.setTime(t)}/>
-      <button onClick={() => this.restart()}>Restart</button>
-      <div>
-        {this.state.cells.map((row, i) =>
-          <div className='game__row' key={i}>
-            {row.map((cell, j) =>
-              <Cell
-                key = {j}
-                index = {{i,j}}
-                value = {cell}
-                isBomb = {cell === 9}
-                isClicked = {!this.state.final ? !!this.state.empties.find(el => el.i === i && el.j === j) : true}
-                generateMines = {(!this.state.start && !this.state.final) ? (x, y) => {this.generateMines(x, y)} : undefined}
-                start = {this.state.start}
-                checkNeighbours = {(i, j) => this.checkNeighbours(i, j)}
-                endGame = {(option) => this.endGame(option)}
-                checkMines = {(par) => this.checkMines(par)}
-                changeFlagsNumber = {(par) => this.changeFlagsNumber(par)}
-                flagsLeft = {this.state.flagsLeft}
-              />
+    return (
+      <div className="game">
+        <div className="game__wrapper">
+          <div className="game__stats">
+            <Timer start={this.state.start} final={this.state.final} setTime={(t) => this.setTime(t)}/>
+            <button className="game__restart-btn" onClick={() => this.restart()}>R</button>
+            <div className="game__mines-left">
+              <div className="game__mine-value">{this.state.flagsLeft || 0}</div>
+              <img className="game__mine-icon" src={mine} alt="mine"/>
+            </div>
+          </div>
+          <div>
+            {this.state.cells.map((row, i) =>
+              <div className="game__row" key={i}>
+                {row.map((cell, j) =>
+                  <Cell
+                    key = {j}
+                    index = {{i,j}}
+                    value = {cell}
+                    isBomb = {cell === 9}
+                    isClicked = {!this.state.final ? !!this.state.empties.find(el => el.i === i && el.j === j) : true}
+                    generateMines = {(!this.state.start && !this.state.final) ? (x, y) => {this.generateMines(x, y)} : undefined}
+                    start = {this.state.start}
+                    checkNeighbours = {(i, j) => this.checkNeighbours(i, j)}
+                    endGame = {(option) => this.endGame(option)}
+                    checkMines = {(par) => this.checkMines(par)}
+                    changeFlagsNumber = {(par) => this.changeFlagsNumber(par)}
+                    flagsLeft = {this.state.flagsLeft}
+                  />
+                )}
+              </div>
             )}
           </div>
-        )}
+        </div>
       </div>
-    </div>
+    )
   }
 };
 

@@ -33,9 +33,9 @@ class Cell extends Component {
       this.setState({
         isMarked: !this.state.isMarked
       }, () => {
-        this.props.changeFlagsNumber(this.state.isMarked ? '-' : '+');
+        this.props.changeFlagsNumber(this.state.isMarked ? -1 : 1);
         if (this.props.isBomb && !this.props.isClicked) {
-          this.props.checkMines(this.state.isMarked ? '-' : '+');
+          this.props.checkMines(this.state.isMarked ? -1 : 1);
         }
       });
     }

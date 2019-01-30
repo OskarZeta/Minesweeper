@@ -1,30 +1,31 @@
 import React, { Component } from 'react';
-import { Router, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Options from './Options.js';
 
 class Menu extends Component {
   state = {
     options : false
   }
-  triggerOptions() {
+  triggerOptions(e) {
     this.setState({
       options: !this.state.options
     });
   }
   render() {
-    return <div>
+    return <div className="menu">
+      <h1 className="menu__header">minesweeper</h1>
       <ul>
         <li>
-          <Link to='/game'>New game</Link>
+          <Link className="menu__btn" to='/game'>New game</Link>
         </li>
         <li>
-          <button onClick={() => {this.triggerOptions()}}>
+          <button  className="menu__btn" onClick={() => {this.triggerOptions()}}>
             Options
           </button>
           {this.state.options && <Options triggerOptions={() => {this.triggerOptions()}}/>}
         </li>
         <li>
-          <Link to='/scores'>High scores</Link>
+          <Link className="menu__btn" to='/scores'>High scores</Link>
         </li>
       </ul>
     </div>
